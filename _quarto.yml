@@ -1,0 +1,26 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Julia for Data Science"
+  subtitle: "Hadley's excellent 'R for data science' but in Julia"
+  author: "G. Vituri"
+  date: "30/08/2023"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - data-visualization.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

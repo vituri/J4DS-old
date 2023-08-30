@@ -1,0 +1,122 @@
+---
+title: "Data visualization"
+---
+
+## Introduction
+
+```{julia}
+using PalmerPenguins, DataFrames
+using AlgebraOfGraphics
+using TidierData, TidierPlots
+using Pipe: @pipe
+```
+
+```{julia}
+penguins = dropmissing(DataFrame(PalmerPenguins.load()))
+first(penguins, 6)
+```
+
+
+```{julia}
+describe(penguins)
+```
+
+```{julia}
+#| include: false
+# file_url = "https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv"
+
+# csv_body = (HTTP.get(file_url)).body
+# penguins = CSV.File(csv_body) |> DataFrame
+```
+
+## First steps
+
+```{julia}
+@ggplot(data = penguins) + 
+    @geom_point(aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+```{julia}
+pp = data(penguins) * mapping(:flipper_length_mm, :body_mass_g)
+draw(pp)
+```
+
+```{julia}
+@ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = body_mass_g, color = species)
+) +
+  @geom_point()
+```
+
+```{julia}
+pp2 = pp * mapping(color = :species)
+draw(pp2)
+```
+
+
+```{julia}
+@ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = body_mass_g, color = species)
+) +
+  @geom_point() + 
+  @geom_smooth(method = "lm")
+```
+
+```{julia}
+layers = linear() + mapping()
+pp2 = pp * layers * mapping(color = :species)
+draw(pp2)
+```
+
+```{julia}
+@ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  @geom_point(aes(color = species)) + 
+  @geom_smooth(method = "lm")
+```
+
+```{julia}
+# layers = linear() + mapping()
+pp2 = pp * mapping(color = :species) + pp * linear()
+draw(pp2)
+```
+
+```{julia}
+@ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  @geom_point(aes(color = species, shape = species)) + 
+  @geom_smooth(method = "lm")
+```
+
+```{julia}
+# layers = linear() + mapping()
+pp2 = pp * mapping(color = :species, marker = :species) + pp * linear()
+draw(pp2)
+```
+
+```{julia}
+@ggplot(
+  penguins,
+  aes(x = flipper_length_mm, y = body_mass_g)
+) +
+  @geom_point(aes(color = species, shape = species)) + 
+  @geom_smooth(method = "lm") + 
+  @labs(     
+    title = "Body mass and flipper length",
+    subtitle = "Dimensions for Adelie, Chinstrap, and Gentoo Penguins",
+    x = "Flipper length (mm)", y = "Body mass (g)",
+    color = "Species", shape = "Species"  
+  )
+```
+
+```{julia}
+# layers = linear() + mapping()
+pp2 = pp * mapping(color = :species, marker = :species) + pp * linear()
+draw(pp2)
+```
